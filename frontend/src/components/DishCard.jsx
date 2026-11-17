@@ -1,3 +1,5 @@
+import { imageUrl } from "../images";
+
 const money = new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN" });
 // Nazwy odpowiadają polu dishes.name zwracanemu przez API.
 const dishPhotos = {
@@ -18,7 +20,7 @@ const dishPhotos = {
 export default function DishCard({ dish }) {
   const photo = dishPhotos[dish.name];
   return <article className="overflow-hidden rounded-2xl border border-stone-200 bg-white">
-    {photo && <img src={`/images/menu/${photo.file}`} alt={photo.alt}
+    {photo && <img src={imageUrl(`menu/${photo.file}`)} alt={photo.alt}
       className="aspect-[4/3] w-full object-cover" style={{ objectPosition: photo.position }} />}
     <div className="p-5">
       <div className="flex justify-between gap-4"><h4 className="font-semibold">{dish.name}</h4><span className="shrink-0 font-semibold text-orange-900">{money.format(dish.price_grosz / 100)}</span></div>

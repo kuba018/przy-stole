@@ -33,3 +33,15 @@ Późniejsze wersje zachowują treść, zdjęcia i funkcjonalność strony. Opty
 | Fully Loaded | Czas zakończenia ładowania według definicji WebPageTest, uwzględniający jego kryterium bezczynności sieci |
 | Rozmiar strony | Liczba bajtów przesłanych dla zasobów; w raporcie należy odróżnić transfer od rozmiaru po rozpakowaniu |
 | Liczba żądań | Liczba żądań sieciowych zarejestrowanych podczas pomiaru |
+
+## Wariant caching
+
+Gałąź `optimization/caching` bazuje na commicie `7b6fa3259755f394d93b4c2a8a16a7f0d8b63716`.
+
+- Zdjęcia przeniesiono do `frontend/src/assets/images`. Vite nadaje zdjęciom, JS i CSS nazwy zależne od zawartości. Express wysyła dla `/assets` nagłówek `Cache-Control: public, max-age=31536000, immutable`.
+- HTML i pozostałe zasoby wymagają rewalidacji (`no-cache`). Nowy build wskazuje aktualne adresy zmienionych zasobów.
+- Gotowa odpowiedź menu jest przechowywana w pamięci procesu. Liczniki SQLite `data_version` i `total_changes()` unieważniają ją po zmianach bazy, również z innego połączenia. Menu i konfiguracja restauracji korzystają z ETag oraz rewalidacji HTTP.
+- Rezerwacje, healthcheck i błędy API otrzymują `no-store`.
+
+Testować wersję produkcyjną przez `npm run build`, `npm test`, `npm run lint`, `npm start`.
+Test nagłówków zasobów wymaga wcześniejszego buildu. Dla cache wykonać zarówno pierwszą wizytę z pustą pamięcią, jak i ponowną wizytę z zachowaną pamięcią podręczną. W DevTools wyłączyć opcję Disable cache. WebPageTest First View i Repeat View raportować osobno. Sam test Lighthouse z wyczyszczoną pamięcią nie mierzy korzyści ponownej wizyty.
