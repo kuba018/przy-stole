@@ -58,7 +58,7 @@ test("Cache: wersjonowane zasoby i rewalidacja HTML", {
     assert.equal(response.headers.get("cache-control"), "no-cache");
   }
   const assets = fs.readdirSync(path.join(dist, "assets"));
-  assert.equal(assets.filter(name => name.endsWith(".jpg")).length, 14);
+  assert.equal(assets.filter(name => name.endsWith(".jpg")).length, 23);
   for (const name of assets) {
     const response = await fetch(`${base}/assets/${name}`, { method: "HEAD" });
     assert.equal(response.status, 200);
